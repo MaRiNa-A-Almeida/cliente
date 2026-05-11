@@ -72,14 +72,14 @@ def login_usuario(request):
             if usuario is not None:
                 login(request, usuario)
                 return redirect('novo_cliente')
-            else:
-                return HttpResponse(request, "<h1>Usuário ou senha inválidos<h1>")
         else:
+            return HttpResponse(request, "Usuário ou senha inválidos")
+    else:
             form = AuthenticationForm()
             context = {
                 'form': form
             }
-        return render(request, template_name, context)
+    return render(request, template_name, context)
 
 
 
