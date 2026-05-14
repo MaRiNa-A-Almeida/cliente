@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
 
-from .forms import ClienteForm
+from .forms import ClienteForm, UsuarioForm
 from .models import Cliente
 
 @login_required
@@ -61,6 +61,7 @@ def excluir_cliente(request, id):
         return HttpResponse('<h1>Erro ao excluir.Cliente não encontrado<h1>')
     return redirect('novo_cliente')
 
+
 def login_usuario(request):
     template_name = 'login.html'
     if request.method == 'POST':
@@ -79,6 +80,23 @@ def login_usuario(request):
             context = {
                 'form': form
             }
+    return render(request, template_name, context)
+
+
+def novo_usuario(request):
+    template_name = 'novo_usuario.html'
+    if request.method =='POST':
+        form = UsuarioForm(request.POST)
+        if form.is_valid():
+          f = form.save(commit=False)
+          f.set_password(f.password)
+          f.save()
+          return redirect('login_usuario')
+        else:
+          return HttpResponse('Erro ao criar usuário')
+    else: 
+        form = UsuarioForm()
+    context = {'form': form}
     return render(request, template_name, context)
 
 
